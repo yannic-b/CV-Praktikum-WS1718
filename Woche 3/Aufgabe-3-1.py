@@ -58,7 +58,7 @@ for i in range(valImgCombined.shape[0]):
             minDistance = l2Distance(valImgCombined[i], imgCombined[j])
             testLabels[i] = trLabels[j]
               
-#print testLabels
+# print testLabels
 
 # 3.1.1.5
 correct = 0
