@@ -75,7 +75,7 @@ def boxImages(imgs):
         binary = (grey <= otsu)
         props = measure.regionprops(binary.astype(int))[0]
         #box = props.bbox
-        print math.degrees(props.orientation)
+        #print math.degrees(props.orientation)
         rotImg = ndimage.rotate(img, angle=math.degrees(props.orientation), mode='nearest')
         outGrey = np.dot(rotImg[...,:3], [0.299, 0.587, 0.114])
         otsu2 = filters.threshold_otsu(outGrey) + 35
@@ -87,13 +87,13 @@ def boxImages(imgs):
 
 trLabels1, trImages1, valLabels1, valImages1 = importData('1')
 
-#meanClassify(trImages1, valImages1, trLabels1, valLabels1)
-#meanClassify(boxImages(trImages1), boxImages(valImages1), trLabels1, valLabels1)
+meanClassify(trImages1, valImages1, trLabels1, valLabels1)
+meanClassify(boxImages(trImages1), boxImages(valImages1), trLabels1, valLabels1)
 
 
 trLabels2, trImages2, valLabels2, valImages2 = importData('2')
 
-#meanClassify(trImages2, valImages2, trLabels2, valLabels2)
+meanClassify(trImages2, valImages2, trLabels2, valLabels2)
 meanClassify(boxImages(trImages2), boxImages(valImages2), trLabels2, valLabels2)
 
 
