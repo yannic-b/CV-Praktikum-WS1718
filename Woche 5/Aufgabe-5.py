@@ -9,7 +9,7 @@ from glob import glob
 from time import time
 import numpy as np
 from scipy import misc, ndimage
-from skimage import filters, measure, feature
+from skimage import filters, measure
 import matplotlib.pyplot as plt
 
 # Aufgabe 1
@@ -68,40 +68,5 @@ def sobel(img):
     fig.add_subplot(1,4,4)
     plt.imshow(gradient, cmap='Greys_r')
 
-#sobel(nLenna)    
-#sobel(filters.gaussian(nLenna, 5))
-
-
-# Aufgabe 5:
-eye = misc.imread('auge.png')
-
-def match(img, template):
-    percentMatch = feature.match_template(img, template)
-    highestMatch = np.argmax(percentMatch)
-    argmaxCoords = np.unravel_index(highestMatch, percentMatch.shape)
-    print argmaxCoords, percentMatch.shape
-    plt.plot(argmaxCoords[1], argmaxCoords[0], 'bo')
-    plt.imshow(img)
-
-#match(lenna, eye)
-
-whereis = misc.imread('whereIsWally1.jpg')
-wally = misc.imread('wally.png')
-#plt.imshow(whereis)
-match(whereis, wally)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+sobel(nLenna)    
+sobel(filters.gaussian(nLenna, 5))
