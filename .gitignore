@@ -97,3 +97,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+
+# Stuff:
+*.xml
+Projekt/.idea/Projekt.iml
