@@ -35,5 +35,5 @@ country_XX.png in folders: country
 
 #### per Class:
 
-at least 32
+50 -> 100 with mirror images
 

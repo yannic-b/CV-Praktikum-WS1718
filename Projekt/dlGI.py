@@ -17,7 +17,7 @@ import urllib2
 
 # This list is used to search keywords. You can edit this list to search for google images of your choice.
 # You can simply add and remove elements of the list.
-search_keyword = ['japan']
+search_keyword = ['brazil']
 
 # This list is used to further add suffix to your search term.
 # Each element of the list will help you download 100 images.
