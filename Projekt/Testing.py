@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 
 
@@ -17,9 +18,8 @@ img_width, img_height = 300, 180
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
 
-nr_of_classes = 3
-nb_train_samples = 32*nr_of_classes
-nb_validation_samples = 18*nr_of_classes
+nb_train_samples = 32
+nb_validation_samples = 18
 epochs = 50
 batch_size = 16
 
@@ -34,22 +34,22 @@ model.add(Conv2D(32, (3, 3), input_shape=input_shape))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
-# model.add(Conv2D(32, (3, 3), input_shape=input_shape))
-# model.add(Activation('relu'))
-# model.add(MaxPooling2D(pool_size=(2, 2)))
-#
-# model.add(Conv2D(32, (3, 3), input_shape=input_shape))
-# model.add(Activation('relu'))
-# model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(32, (3, 3), input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Conv2D(32, (3, 3), input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
 model.add(Flatten())
 model.add(Dense(64))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
-model.add(Dense(nr_of_classes))
+model.add(Dense(1))
 model.add(Activation('sigmoid'))
 
-model.compile(loss='categorical_crossentropy',
+model.compile(loss='binary_crossentropy',
               optimizer='rmsprop',
               metrics=['accuracy'])
 
@@ -69,13 +69,13 @@ train_generator = train_datagen.flow_from_directory(
     train_data_dir,
     target_size=(img_width, img_height),
     batch_size=batch_size,
-    class_mode='categorical')
+    class_mode='binary')
 
 validation_generator = test_datagen.flow_from_directory(
     validation_data_dir,
     target_size=(img_width, img_height),
     batch_size=batch_size,
-    class_mode='categorical')
+    class_mode='binary')
 
 model.fit_generator(
     train_generator,
