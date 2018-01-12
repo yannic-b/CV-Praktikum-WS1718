@@ -24,9 +24,9 @@ validation_data_dir = 'data/validation'
 nr_of_classes = len(os.listdir('data/validation')) - 1
 print nr_of_classes
 nb_train_samples = 32 * nr_of_classes
-nb_validation_samples = 18*nr_of_classes
-epochs = 50
-batch_size = 16
+nb_validation_samples = 18 * nr_of_classes
+epochs = 42
+batch_size = 32
 
 if K.image_data_format() == 'channels_first':
     input_shape = (3, img_width, img_height)
