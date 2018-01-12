@@ -12,13 +12,15 @@ from keras import backend as K
 
 
 # dimensions of our images.
+KERNEL_SIZE = (4, 4)
+FILTER = 64
 img_width, img_height = 300, 180
 
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
 
 nr_of_classes = 4
-nb_train_samples = 32*nr_of_classes
+nb_train_samples = 32 * nr_of_classes
 nb_validation_samples = 18*nr_of_classes
 epochs = 50
 batch_size = 16
@@ -30,15 +32,15 @@ else:
 
 model = Sequential()
 
-model.add(Conv2D(32, (3, 3), input_shape=input_shape))
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.add(Conv2D(32, (3, 3), input_shape=input_shape))
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.add(Conv2D(32, (3, 3), input_shape=input_shape))
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
