@@ -4,6 +4,8 @@
 @author: Yannic
 """
 
+import os
+
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
@@ -19,7 +21,8 @@ img_width, img_height = 300, 180
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
 
-nr_of_classes = 4
+nr_of_classes = len(os.listdir('data/validation'))
+print nr_of_classes
 nb_train_samples = 32 * nr_of_classes
 nb_validation_samples = 18*nr_of_classes
 epochs = 50
