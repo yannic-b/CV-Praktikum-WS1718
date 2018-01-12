@@ -26,7 +26,7 @@ print nr_of_classes
 nb_train_samples = 32 * nr_of_classes
 nb_validation_samples = 18 * nr_of_classes
 epochs = 42
-batch_size = 32
+batch_size = 8
 
 if K.image_data_format() == 'channels_first':
     input_shape = (3, img_width, img_height)
