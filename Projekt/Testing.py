@@ -7,7 +7,7 @@
 import os
 
 from keras.preprocessing.image import ImageDataGenerator
-from keras.optimizers import RMSprop
+from keras.optimizers import RMSprop, SGD
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
@@ -15,7 +15,7 @@ from keras import backend as K
 
 
 # dimensions of our images.
-OPTIMIZER = RMSprop(lr=0.001, rho=0.9, epsilon=None, decay=0.0) # 'rmsprop'
+OPTIMIZER = SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)  # 'rmsprop'
 KERNEL_SIZE = (4, 4)
 FILTER = 64
 img_width, img_height = 300, 180
