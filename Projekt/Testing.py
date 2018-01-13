@@ -15,14 +15,18 @@ from keras.utils import plot_model
 from keras import backend as K
 
 
-# dimensions of our images.
+# Hyper Parameters:
 LR = 0.00069
 KERNEL_SIZE = (4, 4)
 FILTER = 64
+# dimensions of our images.
 img_width, img_height = 300, 180
 
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
+
+labels = []
+
 
 nr_of_classes = len(os.listdir('data/validation')) - 1
 print nr_of_classes
@@ -92,5 +96,5 @@ model.fit_generator(
     validation_data=validation_generator,
     validation_steps=nb_validation_samples // batch_size)
 
-plot_model(model, to_file='model.png')
+# plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
 # model.save_weights('first_try.h5')
