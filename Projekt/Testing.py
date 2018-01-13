@@ -59,7 +59,7 @@ model.add(Activation('sigmoid'))
 
 model.compile(loss='categorical_crossentropy',
               optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=0.0),
-              metrics=['accuracy, categorical_accuracy'])
+              metrics=['categorical_accuracy'])  # ['accuracy'])
 
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(
