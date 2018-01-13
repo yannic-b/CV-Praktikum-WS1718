@@ -15,7 +15,7 @@ from keras import backend as K
 
 
 # dimensions of our images.
-OPTIMIZER = SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)  # 'rmsprop'
+OPTIMIZER = RMSprop(lr=0.001, rho=0.9, epsilon=K.epsilon(), decay=0.0)  # 'rmsprop'
 KERNEL_SIZE = (4, 4)
 FILTER = 64
 img_width, img_height = 300, 180
