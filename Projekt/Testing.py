@@ -11,11 +11,12 @@ from keras.optimizers import RMSprop, SGD
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
+from keras.utils import plot_model
 from keras import backend as K
 
 
 # dimensions of our images.
-OPTIMIZER = RMSprop(lr=0.001, rho=0.9, epsilon=K.epsilon(), decay=0.0)  # 'rmsprop'
+LR = 0.00069
 KERNEL_SIZE = (4, 4)
 FILTER = 64
 img_width, img_height = 300, 180
@@ -57,8 +58,8 @@ model.add(Dense(nr_of_classes))
 model.add(Activation('sigmoid'))
 
 model.compile(loss='categorical_crossentropy',
-              optimizer=OPTIMIZER,
-              metrics=['accuracy'])
+              optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=0.0),
+              metrics=['accuracy, categorical_accuracy'])
 
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(
@@ -91,4 +92,5 @@ model.fit_generator(
     validation_data=validation_generator,
     validation_steps=nb_validation_samples // batch_size)
 
+plot_model(model, to_file='model.png')
 # model.save_weights('first_try.h5')
