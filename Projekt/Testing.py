@@ -60,10 +60,10 @@ model.compile(loss='categorical_crossentropy',
 
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(
-    rotation_range=25,
+    rotation_range=30,
     rescale=1. / 255,
-    shear_range=0.25,
-    zoom_range=0.25,
+    shear_range=0.17,
+    zoom_range=0.10,
     horizontal_flip=True)
 
 # this is the augmentation configuration we will use for testing:
