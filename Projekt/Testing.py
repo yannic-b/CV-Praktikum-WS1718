@@ -6,11 +6,15 @@
 
 import os
 
+import numpy as np
+
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import RMSprop, SGD
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
+from keras.preprocessing.image import img_to_array, load_img
+from keras.models import load_model
 from keras.utils import plot_model
 from keras import backend as K
 
@@ -25,15 +29,15 @@ img_width, img_height = 300, 180
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
 
-labels = []
+labels = sorted([dir for dir in os.listdir('data/train') if not dir.title().startswith('.')])
+# print labels
 
-
-nr_of_classes = len(os.listdir('data/validation')) - 1
-print nr_of_classes
+nr_of_classes = len(os.listdir('data/train')) - 1
+# print nr_of_classes
 nb_train_samples = 32 * nr_of_classes
 nb_validation_samples = 18 * nr_of_classes
 epochs = 42
-batch_size = 16
+batch_size = 32
 
 if K.image_data_format() == 'channels_first':
     input_shape = (3, img_width, img_height)
@@ -96,5 +100,16 @@ model.fit_generator(
     validation_data=validation_generator,
     validation_steps=nb_validation_samples // batch_size)
 
+# test_model = load_model('testModel.h5')
+img = load_img('germanyTest.png', False, target_size=(img_width, img_height))
+x = img_to_array(img)
+x = np.expand_dims(x, axis=0)
+print model.predict(x)
+preds = model.predict_classes(x)
+probs = model.predict_proba(x)
+print(preds, probs)
+
+# prediction = model.predict(verbose=2)
+
 # plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
-# model.save_weights('first_try.h5')
+model.save('testModel.h5')
