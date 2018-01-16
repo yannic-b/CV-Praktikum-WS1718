@@ -7,6 +7,7 @@
 import os
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import RMSprop, SGD
@@ -93,24 +94,36 @@ validation_generator = test_datagen.flow_from_directory(
     batch_size=batch_size,
     class_mode='categorical')
 
-# model.fit_generator(
-#     train_generator,
-#     steps_per_epoch=nb_train_samples // batch_size,
-#     epochs=epochs,
-#     validation_data=validation_generator,
-#     validation_steps=nb_validation_samples // batch_size)
+model.fit_generator(
+    train_generator,
+    steps_per_epoch=nb_train_samples // batch_size,
+    epochs=epochs,
+    validation_data=validation_generator,
+    validation_steps=nb_validation_samples // batch_size)
 
-test_model = load_model('testModel.h5')
-img = load_img('germanyTest.png', False, target_size=(img_width, img_height))
-x = img_to_array(img)
-x = np.expand_dims(x, axis=0)
-print test_model.predict(x)
-preds = test_model.predict_classes(x)
-probs = test_model.predict_proba(x)
-print(preds, probs)
+# test_model = load_model('testModel.h5')
+test_model = model
 
-prediction = test_model.predict(x, verbose=2)
-print prediction
+
+def predict_image(path):
+    img = load_img(path, False, target_size=(img_width, img_height))
+    print "\n\nTrying to predict following image (" + path + "): "
+    plt.imshow(img)
+    x = img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    print "The image probably shows the flag of " + labels[test_model.predict_classes(x, verbose=0)[0]] + "."
+    prediction =  test_model.predict(x, verbose=0)
+    classes = test_model.predict_classes(x, verbose=0)
+    probs = test_model.predict_proba(x, verbose=0)
+    print "Prediction | Classes | Probabilities"
+    print prediction, classes, probs
+
+
+predict_image("germanyTest.png")
+predict_image("usaTest.png")
+predict_image("us-russia-flag.png")
+
+
 
 # plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
 # model.save('testModel.h5')
