@@ -38,7 +38,7 @@ nr_of_classes = len(os.listdir('data/train')) - 1
 nb_train_samples = 32 * nr_of_classes
 nb_validation_samples = 18 * nr_of_classes
 epochs = 42
-batch_size = 32
+batch_size = 16
 
 if K.image_data_format() == 'channels_first':
     input_shape = (3, img_width, img_height)
@@ -97,10 +97,10 @@ validation_generator = test_datagen.flow_from_directory(
 
 model.fit_generator(
     train_generator,
-    steps_per_epoch=nb_train_samples/4 // batch_size,
+    steps_per_epoch=nb_train_samples // batch_size,
     epochs=epochs,
     validation_data=validation_generator,
-    validation_steps=nb_validation_samples/4 // batch_size)
+    validation_steps=nb_validation_samples // batch_size)
 
 # test_model = load_model('testModel.h5')
 test_model = model
