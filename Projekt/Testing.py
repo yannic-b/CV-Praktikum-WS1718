@@ -97,10 +97,10 @@ validation_generator = test_datagen.flow_from_directory(
 
 model.fit_generator(
     train_generator,
-    steps_per_epoch=nb_train_samples/2 // batch_size,
+    steps_per_epoch=nb_train_samples/4 // batch_size,
     epochs=epochs,
     validation_data=validation_generator,
-    validation_steps=nb_validation_samples/2 // batch_size)
+    validation_steps=nb_validation_samples/4 // batch_size)
 
 # test_model = load_model('testModel.h5')
 test_model = model
