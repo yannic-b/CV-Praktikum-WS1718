@@ -64,7 +64,8 @@ model.add(Dense(64))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
 model.add(Dense(nr_of_classes))
-model.add(Activation('sigmoid'))
+# model.add(Activation('sigmoid'))
+model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy',
               optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=0.0),
