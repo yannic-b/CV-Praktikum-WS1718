@@ -93,23 +93,23 @@ validation_generator = test_datagen.flow_from_directory(
     batch_size=batch_size,
     class_mode='categorical')
 
-model.fit_generator(
-    train_generator,
-    steps_per_epoch=nb_train_samples // batch_size,
-    epochs=epochs,
-    validation_data=validation_generator,
-    validation_steps=nb_validation_samples // batch_size)
+# model.fit_generator(
+#     train_generator,
+#     steps_per_epoch=nb_train_samples // batch_size,
+#     epochs=epochs,
+#     validation_data=validation_generator,
+#     validation_steps=nb_validation_samples // batch_size)
 
-# test_model = load_model('testModel.h5')
+test_model = load_model('testModel.h5')
 img = load_img('germanyTest.png', False, target_size=(img_width, img_height))
 x = img_to_array(img)
 x = np.expand_dims(x, axis=0)
-print model.predict(x)
-preds = model.predict_classes(x)
-probs = model.predict_proba(x)
+print test_model.predict(x)
+preds = test_model.predict_classes(x)
+probs = test_model.predict_proba(x)
 print(preds, probs)
 
-# prediction = model.predict(verbose=2)
+prediction = test_model.predict(verbose=2)
 
 # plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
-model.save('testModel.h5')
+# model.save('testModel.h5')
