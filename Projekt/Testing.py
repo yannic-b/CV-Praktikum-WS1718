@@ -109,7 +109,7 @@ preds = test_model.predict_classes(x)
 probs = test_model.predict_proba(x)
 print(preds, probs)
 
-prediction = test_model.predict(verbose=2)
+prediction = test_model.predict(x, verbose=2)
 
 # plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
 # model.save('testModel.h5')
