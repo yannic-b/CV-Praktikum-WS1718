@@ -125,8 +125,8 @@ try:
     predict_image("germanyTest.png")
     predict_image("usaTest.png")
     predict_image("us-russia-flag.png")
-except:
-    pass
+except OSError:
+    print ":("
 
 
 # plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
