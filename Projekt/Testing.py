@@ -41,7 +41,7 @@ nr_of_classes = len(os.listdir('data/train')) - 1
 # print nr_of_classes
 nb_train_samples = 32 * nr_of_classes
 nb_validation_samples = 18 * nr_of_classes
-epochs = 64
+epochs = 128
 batch_size = 32
 
 if K.image_data_format() == 'channels_first':
