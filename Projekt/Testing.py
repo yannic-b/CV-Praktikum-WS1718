@@ -25,7 +25,7 @@ from keras import backend as K
 matplotlib.use('Agg')
 
 # Hyper Parameters:
-LR = 0.00069
+LR = 0.00013
 KERNEL_SIZE = (4, 4)
 FILTER = 64
 # dimensions of our images.
@@ -41,7 +41,7 @@ nr_of_classes = len(os.listdir('data/train')) - 1
 # print nr_of_classes
 nb_train_samples = 32 * nr_of_classes
 nb_validation_samples = 18 * nr_of_classes
-epochs = 42
+epochs = 64
 batch_size = 32
 
 if K.image_data_format() == 'channels_first':
