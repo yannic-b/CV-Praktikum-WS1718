@@ -9,6 +9,7 @@ import os, errno
 # try:
 
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 from keras.preprocessing.image import ImageDataGenerator
@@ -21,6 +22,7 @@ from keras.models import load_model
 from keras.utils import plot_model
 from keras import backend as K
 
+matplotlib.use('Agg')
 
 # Hyper Parameters:
 LR = 0.00069
