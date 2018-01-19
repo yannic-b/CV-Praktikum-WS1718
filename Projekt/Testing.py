@@ -42,7 +42,7 @@ nr_of_classes = len(os.listdir('data/train')) - 1
 nb_train_samples = 32 * nr_of_classes
 nb_validation_samples = 18 * nr_of_classes
 epochs = 42
-batch_size = 16
+batch_size = 32
 
 if K.image_data_format() == 'channels_first':
     input_shape = (3, img_width, img_height)
@@ -50,6 +50,14 @@ else:
     input_shape = (img_width, img_height, 3)
 
 model = Sequential()
+
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
 model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
 model.add(Activation('relu'))
