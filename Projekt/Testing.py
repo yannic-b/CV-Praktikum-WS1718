@@ -82,7 +82,7 @@ def train_model():
     model.add(Dropout(0.5))
     model.add(Dense(nr_of_classes))
     # model.add(Activation('sigmoid'))
-    # model.add(Activation('softmax'))
+    model.add(Activation('softmax'))
 
     model.compile(loss='categorical_crossentropy',
                   optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
@@ -127,7 +127,7 @@ def predict_image(path):
     test_model = model  # load_model('testModel.h5')
     img = load_img(path, False, target_size=(img_width, img_height))
     print "\n\nTrying to predict following image (" + path + "): "
-    plt.imshow(img)
+    # plt.imshow(img)
     x = img_to_array(img)
     x = np.expand_dims(x, axis=0)
     print "The image probably shows the flag of " + labels[test_model.predict_classes(x, verbose=0)[0]] + "."
