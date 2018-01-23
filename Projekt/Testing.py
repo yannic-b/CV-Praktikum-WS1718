@@ -36,7 +36,7 @@ img_width, img_height = 300, 180
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
 
-labels = sorted([dir for dir in os.listdir(train_data_dir) if not dir.title().startswith('.')])
+labels = sorted([drtr for drtr in os.listdir(train_data_dir) if not drtr.title().startswith('.')])
 # print labels
 
 nr_of_classes = len(os.listdir(train_data_dir)) - 1
@@ -51,76 +51,80 @@ if K.image_data_format() == 'channels_first':
 else:
     input_shape = (img_width, img_height, 3)
 
-model = Sequential()
+model = None
+def train_model():
 
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+    model = Sequential()
 
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.add(Flatten())
-model.add(Dense(64))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(nr_of_classes))
-# model.add(Activation('sigmoid'))
-model.add(Activation('softmax'))
+    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.compile(loss='categorical_crossentropy',
-              optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
-              metrics=['categorical_accuracy'])  # ['accuracy'])
+    model.add(Flatten())
+    model.add(Dense(64))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(nr_of_classes))
+    # model.add(Activation('sigmoid'))
+    # model.add(Activation('softmax'))
 
-# this is the augmentation configuration we will use for training
-train_datagen = ImageDataGenerator(
-    rotation_range=45,
-    rescale=1. / 255,
-    shear_range=0.17,
-    zoom_range=0.10,
-    horizontal_flip=True)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
+                  metrics=['categorical_accuracy'])  # ['accuracy'])
 
-# this is the augmentation configuration we will use for testing:
-# only rescaling
-test_datagen = ImageDataGenerator(rescale=1. / 255)
+    # this is the augmentation configuration we will use for training
+    train_datagen = ImageDataGenerator(
+        rotation_range=45,
+        rescale=1. / 255,
+        shear_range=0.17,
+        zoom_range=0.17,
+        horizontal_flip=True)
 
-train_generator = train_datagen.flow_from_directory(
-    train_data_dir,
-    target_size=(img_width, img_height),
-    batch_size=batch_size,
-    class_mode='categorical')
+    # this is the augmentation configuration we will use for testing:
+    # only rescaling
+    test_datagen = ImageDataGenerator(rescale=1. / 255)
 
-validation_generator = test_datagen.flow_from_directory(
-    validation_data_dir,
-    target_size=(img_width, img_height),
-    batch_size=batch_size,
-    class_mode='categorical')
+    train_generator = train_datagen.flow_from_directory(
+        train_data_dir,
+        target_size=(img_width, img_height),
+        batch_size=batch_size,
+        class_mode='categorical')
 
-model.fit_generator(
-    train_generator,
-    steps_per_epoch=nb_train_samples // batch_size,
-    epochs=epochs,
-    validation_data=validation_generator,
-    validation_steps=nb_validation_samples // batch_size)
+    validation_generator = test_datagen.flow_from_directory(
+        validation_data_dir,
+        target_size=(img_width, img_height),
+        batch_size=batch_size,
+        class_mode='categorical')
 
-# test_model = load_model('testModel.h5')
-test_model = model
+    model.fit_generator(
+        train_generator,
+        steps_per_epoch=nb_train_samples // batch_size,
+        epochs=epochs,
+        validation_data=validation_generator,
+        validation_steps=nb_validation_samples // batch_size)
+
+
+train_model()
 
 
 def predict_image(path):
+    test_model = model  # load_model('testModel.h5')
     img = load_img(path, False, target_size=(img_width, img_height))
     print "\n\nTrying to predict following image (" + path + "): "
     plt.imshow(img)
@@ -138,9 +142,44 @@ def predict_image(path):
 # predict_image("usaTest.png")
 # predict_image("us-russia-flag.png")
 # predict_image("usaPillow.png")
+predict_image("data/train/usa/usa25.png")
+
+
+def augment_image(country, nr):
+    datagen = ImageDataGenerator(
+        rotation_range=17,
+        rescale=1. / 255,
+        shear_range=0.07,
+        zoom_range=0.07,
+        horizontal_flip=True,
+        fill_mode='constant',
+        cval=128)
+    # ImageDataGenerator(
+    # rotation_range=40,
+    # width_shift_range=0.2,
+    # height_shift_range=0.2,
+    # shear_range=0.2,
+    # zoom_range=0.2,
+    # horizontal_flip=True,
+    # fill_mode='nearest')
+    img = load_img('data/train/'+country+'/'+country+nr+'.png')  # this is a PIL image
+    x = img_to_array(img)  # this is a Numpy array with shape (3, 150, 150)
+    x = x.reshape((1,) + x.shape)  # this is a Numpy array with shape (1, 3, 150, 150)
+    # the .flow() command below generates batches of randomly transformed images
+    # and saves the results to the `preview/` directory
+    i = 0
+    for batch in datagen.flow(x, batch_size=1, save_to_dir='augmented-images', save_prefix=country, save_format='png'):
+        i += 1
+        if i > 20:
+            break
+
+
+# augment_image('germany', '11')
+
+
 # except OSError:
 #     print ":("
 
 
 # plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
-model.save('testModel.h5')
+# model.save('testModel.h5')
