@@ -23,7 +23,7 @@ from keras.utils import plot_model
 from keras import backend as K
 
 
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 
 # Hyper Parameters:
 LR = 0.001  # 0.00013
@@ -51,121 +51,101 @@ if K.image_data_format() == 'channels_first':
 else:
     input_shape = (img_width, img_height, 3)
 
+
 model = None
-# def train_model():
-
-model = Sequential()
-
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-
-model.add(Flatten())
-model.add(Dense(64))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(nr_of_classes))
-# model.add(Activation('sigmoid'))
-model.add(Activation('softmax'))
-
-model.compile(loss='categorical_crossentropy',
-              optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
-              metrics=['categorical_accuracy'])  # ['accuracy'])
-
-# this is the augmentation configuration we will use for training
-train_datagen = ImageDataGenerator(
-    rotation_range=45,
-    rescale=1. / 255,
-    shear_range=0.17,
-    zoom_range=0.17,
-    horizontal_flip=True)
-
-# this is the augmentation configuration we will use for testing:
-# only rescaling
-test_datagen = ImageDataGenerator(rescale=1. / 255)
-
-train_generator = train_datagen.flow_from_directory(
-    train_data_dir,
-    target_size=(img_width, img_height),
-    batch_size=batch_size,
-    class_mode='categorical')
-
-validation_generator = test_datagen.flow_from_directory(
-    validation_data_dir,
-    target_size=(img_width, img_height),
-    batch_size=batch_size,
-    class_mode='categorical')
-
-# model.fit_generator(
-#     train_generator,
-#     steps_per_epoch=nb_train_samples // batch_size,
-#     epochs=epochs,
-#     validation_data=validation_generator,
-#     validation_steps=nb_validation_samples // batch_size)
 
 
-# train_model()
+def train_model(from_scratch):
+    global model
+    if from_scratch:
+        model = Sequential()
+        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Flatten())
+        model.add(Dense(64))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(nr_of_classes))
+        # model.add(Activation('sigmoid'))
+        model.add(Activation('softmax'))
+        model.compile(loss='categorical_crossentropy',
+                      optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
+                      metrics=['categorical_accuracy'])  # ['accuracy'])
+        # this is the augmentation configuration we will use for training
+        train_datagen = ImageDataGenerator(
+            rotation_range=45,
+            rescale=1. / 255,
+            shear_range=0.17,
+            zoom_range=0.17,
+            horizontal_flip=True)
+        # this is the augmentation configuration we will use for testing:
+        # only rescaling
+        test_datagen = ImageDataGenerator(rescale=1. / 255)
+        train_generator = train_datagen.flow_from_directory(
+            train_data_dir,
+            target_size=(img_width, img_height),
+            batch_size=batch_size,
+            class_mode='categorical')
+        validation_generator = test_datagen.flow_from_directory(
+            validation_data_dir,
+            target_size=(img_width, img_height),
+            batch_size=batch_size,
+            class_mode='categorical')
+        model.fit_generator(
+            train_generator,
+            steps_per_epoch=nb_train_samples // batch_size,
+            epochs=epochs,
+            validation_data=validation_generator,
+            validation_steps=nb_validation_samples // batch_size)
+    else:
+        model = load_model('testModel.h5')
 
 
 def predict_image(path):
-    test_model = load_model('testModel.h5')
-    img = load_img(path, False, target_size=(img_width, img_height))
+    img = load_img('predict/'+path, False, target_size=(img_width, img_height))
     print "\n\nTrying to predict following image (" + path + "): "
     # plt.imshow(img)
     x = img_to_array(img)
     x /= 255
     x = np.expand_dims(x, axis=0)
-    print "The image probably shows the flag of " + labels[test_model.predict_classes(x, verbose=0)[0]] + "."
-    prediction = test_model.predict(x, verbose=0) * 100
-    classes = test_model.predict_classes(x, verbose=0)
-    probs = test_model.predict_proba(x, verbose=0) * 100
+    print "The image probably shows the flag of " + labels[model.predict_classes(x, verbose=0)[0]] + "."
+    prediction = model.predict(x, verbose=0) * 100
+    classes = model.predict_classes(x, verbose=0)
+    probs = model.predict_proba(x, verbose=0) * 100
     print "Prediction | Classes | Probabilities"
     np.set_printoptions(linewidth=128, formatter={'float': '{: 0.3f}'.format})
     print prediction, '\n', classes, '\n', probs
 
 
-# predict_image("noise.png")
-# predict_image("beats.png")
-# predict_image("germanyTest.png")
-# predict_image("usaTest.png")
-# predict_image("us-russia-flag.png")
-# predict_image("usaPillow.png")
-# predict_image("data/train/usa/usa25.png")
+def predict():
+    for img in os.listdir('predict'):
+        predict_image(img)
 
 
 def augment_image(country, nr):
     datagen = ImageDataGenerator(
-        rotation_range=17,
         rescale=1. / 255,
+        rotation_range=25,
+        # width_shift_range=0.2,
+        # height_shift_range=0.2,
         shear_range=0.07,
         zoom_range=0.07,
         horizontal_flip=True,
         fill_mode='nearest',
         cval=128)
-    # ImageDataGenerator(
-    # rotation_range=40,
-    # width_shift_range=0.2,
-    # height_shift_range=0.2,
-    # shear_range=0.2,
-    # zoom_range=0.2,
-    # horizontal_flip=True,
-    # fill_mode='nearest')
     img = load_img('data/train/'+country+'/'+country+nr+'.png')  # this is a PIL image
     x = img_to_array(img)  # this is a Numpy array with shape (3, 150, 150)
     x = x.reshape((1,) + x.shape)  # this is a Numpy array with shape (1, 3, 150, 150)
@@ -178,12 +158,16 @@ def augment_image(country, nr):
             break
 
 
-augment_image('canada', '07')
+train_model(from_scratch=0)
+
+# predict()
+
+# augment_image('canada', '07')
+
+# plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
+
+# model.save('testModel.h5')
 
 
 # except OSError:
 #     print ":("
-
-
-# plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
-# model.save('testModel.h5')
