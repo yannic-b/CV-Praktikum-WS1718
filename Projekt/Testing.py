@@ -22,10 +22,12 @@ from keras.models import load_model
 from keras.utils import plot_model
 from keras import backend as K
 
+
 matplotlib.use('Agg')
 
 # Hyper Parameters:
-LR = 0.00013
+LR = 0.001  # 0.00013
+DECAY = 0.0001
 KERNEL_SIZE = (4, 4)
 FILTER = 64
 # dimensions of our images.
@@ -41,7 +43,7 @@ nr_of_classes = len(os.listdir(train_data_dir)) - 1
 # print nr_of_classes
 nb_train_samples = 349  # 32 * nr_of_classes
 nb_validation_samples = 188  # 18 * nr_of_classes
-epochs = 128
+epochs = 42
 batch_size = 16
 
 if K.image_data_format() == 'channels_first':
@@ -80,7 +82,7 @@ model.add(Dense(nr_of_classes))
 model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy',
-              optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=0.0),
+              optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
               metrics=['categorical_accuracy'])  # ['accuracy'])
 
 # this is the augmentation configuration we will use for training
