@@ -129,21 +129,24 @@ def predict_image(path):
     print "\n\nTrying to predict following image (" + path + "): "
     # plt.imshow(img)
     x = img_to_array(img)
+    x /= 255
     x = np.expand_dims(x, axis=0)
     print "The image probably shows the flag of " + labels[test_model.predict_classes(x, verbose=0)[0]] + "."
-    prediction = test_model.predict(x, verbose=0)
+    prediction = test_model.predict(x, verbose=0) * 100
     classes = test_model.predict_classes(x, verbose=0)
-    probs = test_model.predict_proba(x, verbose=0)
+    probs = test_model.predict_proba(x, verbose=0) * 100
     print "Prediction | Classes | Probabilities"
+    np.set_printoptions(linewidth=128, formatter={'float': '{: 0.3f}'.format})
     print prediction, '\n', classes, '\n', probs
 
 
-predict_image("beats.png")
-predict_image("germanyTest.png")
-predict_image("usaTest.png")
-predict_image("us-russia-flag.png")
-predict_image("usaPillow.png")
-predict_image("data/train/usa/usa25.png")
+# predict_image("noise.png")
+# predict_image("beats.png")
+# predict_image("germanyTest.png")
+# predict_image("usaTest.png")
+# predict_image("us-russia-flag.png")
+# predict_image("usaPillow.png")
+# predict_image("data/train/usa/usa25.png")
 
 
 def augment_image(country, nr):
@@ -153,7 +156,7 @@ def augment_image(country, nr):
         shear_range=0.07,
         zoom_range=0.07,
         horizontal_flip=True,
-        fill_mode='constant',
+        fill_mode='nearest',
         cval=128)
     # ImageDataGenerator(
     # rotation_range=40,
@@ -175,7 +178,7 @@ def augment_image(country, nr):
             break
 
 
-# augment_image('germany', '11')
+augment_image('canada', '07')
 
 
 # except OSError:
