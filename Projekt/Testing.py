@@ -138,10 +138,10 @@ def predict_image(path):
     print prediction, '\n', classes, '\n', probs
 
 
-# predict_image("germanyTest.png")
-# predict_image("usaTest.png")
-# predict_image("us-russia-flag.png")
-# predict_image("usaPillow.png")
+predict_image("germanyTest.png")
+predict_image("usaTest.png")
+predict_image("us-russia-flag.png")
+predict_image("usaPillow.png")
 predict_image("data/train/usa/usa25.png")
 
 
