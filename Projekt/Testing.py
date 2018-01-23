@@ -42,7 +42,7 @@ nr_of_classes = len(os.listdir('dataO/train')) - 1
 nb_train_samples = 349  # 32 * nr_of_classes
 nb_validation_samples = 188  # 18 * nr_of_classes
 epochs = 128
-batch_size = 32
+batch_size = 16
 
 if K.image_data_format() == 'channels_first':
     input_shape = (3, img_width, img_height)
@@ -107,14 +107,14 @@ validation_generator = test_datagen.flow_from_directory(
     batch_size=batch_size,
     class_mode='categorical')
 
-model.fit_generator(
-    train_generator,
-    steps_per_epoch=nb_train_samples // batch_size,
-    epochs=epochs,
-    validation_data=validation_generator,
-    validation_steps=nb_validation_samples // batch_size)
+# model.fit_generator(
+#     train_generator,
+#     steps_per_epoch=nb_train_samples // batch_size,
+#     epochs=epochs,
+#     validation_data=validation_generator,
+#     validation_steps=nb_validation_samples // batch_size)
 
-# test_model = load_model('testModel.h5')
+test_model = load_model('testModel.h5')
 test_model = model
 
 
@@ -125,11 +125,11 @@ def predict_image(path):
     x = img_to_array(img)
     x = np.expand_dims(x, axis=0)
     print "The image probably shows the flag of " + labels[test_model.predict_classes(x, verbose=0)[0]] + "."
-    prediction =  test_model.predict(x, verbose=0)
+    prediction = test_model.predict(x, verbose=0)
     classes = test_model.predict_classes(x, verbose=0)
     probs = test_model.predict_proba(x, verbose=0)
     print "Prediction | Classes | Probabilities"
-    print prediction, classes, probs
+    print prediction, '\n', classes, '\n', probs
 
 
 predict_image("germanyTest.png")
