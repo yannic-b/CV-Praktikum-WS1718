@@ -31,13 +31,13 @@ FILTER = 64
 # dimensions of our images.
 img_width, img_height = 300, 180
 
-train_data_dir = 'dataO/train'
-validation_data_dir = 'dataO/validation'
+train_data_dir = 'data/train'
+validation_data_dir = 'data/validation'
 
-labels = sorted([dir for dir in os.listdir('data/train') if not dir.title().startswith('.')])
+labels = sorted([dir for dir in os.listdir(train_data_dir) if not dir.title().startswith('.')])
 # print labels
 
-nr_of_classes = len(os.listdir('dataO/train')) - 1
+nr_of_classes = len(os.listdir(train_data_dir)) - 1
 # print nr_of_classes
 nb_train_samples = 349  # 32 * nr_of_classes
 nb_validation_samples = 188  # 18 * nr_of_classes
@@ -107,14 +107,14 @@ validation_generator = test_datagen.flow_from_directory(
     batch_size=batch_size,
     class_mode='categorical')
 
-# model.fit_generator(
-#     train_generator,
-#     steps_per_epoch=nb_train_samples // batch_size,
-#     epochs=epochs,
-#     validation_data=validation_generator,
-#     validation_steps=nb_validation_samples // batch_size)
+model.fit_generator(
+    train_generator,
+    steps_per_epoch=nb_train_samples // batch_size,
+    epochs=epochs,
+    validation_data=validation_generator,
+    validation_steps=nb_validation_samples // batch_size)
 
-test_model = load_model('testModel.h5')
+# test_model = load_model('testModel.h5')
 test_model = model
 
 
@@ -132,12 +132,13 @@ def predict_image(path):
     print prediction, '\n', classes, '\n', probs
 
 
-predict_image("germanyTest.png")
-predict_image("usaTest.png")
-predict_image("us-russia-flag.png")
+# predict_image("germanyTest.png")
+# predict_image("usaTest.png")
+# predict_image("us-russia-flag.png")
+# predict_image("usaPillow.png")
 # except OSError:
 #     print ":("
 
 
 # plot_model(model, to_file='model.png')  # install pydot and graphviz for `pydotprint` to work
-# model.save('testModel.h5')
+model.save('testModel.h5')
