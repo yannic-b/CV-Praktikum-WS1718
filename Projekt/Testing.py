@@ -52,75 +52,75 @@ else:
     input_shape = (img_width, img_height, 3)
 
 model = None
-def train_model():
+# def train_model():
 
-    model = Sequential()
+model = Sequential()
 
-    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    model.add(Flatten())
-    model.add(Dense(64))
-    model.add(Activation('relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(nr_of_classes))
-    # model.add(Activation('sigmoid'))
-    model.add(Activation('softmax'))
+model.add(Flatten())
+model.add(Dense(64))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(nr_of_classes))
+# model.add(Activation('sigmoid'))
+model.add(Activation('softmax'))
 
-    model.compile(loss='categorical_crossentropy',
-                  optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
-                  metrics=['categorical_accuracy'])  # ['accuracy'])
+model.compile(loss='categorical_crossentropy',
+              optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
+              metrics=['categorical_accuracy'])  # ['accuracy'])
 
-    # this is the augmentation configuration we will use for training
-    train_datagen = ImageDataGenerator(
-        rotation_range=45,
-        rescale=1. / 255,
-        shear_range=0.17,
-        zoom_range=0.17,
-        horizontal_flip=True)
+# this is the augmentation configuration we will use for training
+train_datagen = ImageDataGenerator(
+    rotation_range=45,
+    rescale=1. / 255,
+    shear_range=0.17,
+    zoom_range=0.17,
+    horizontal_flip=True)
 
-    # this is the augmentation configuration we will use for testing:
-    # only rescaling
-    test_datagen = ImageDataGenerator(rescale=1. / 255)
+# this is the augmentation configuration we will use for testing:
+# only rescaling
+test_datagen = ImageDataGenerator(rescale=1. / 255)
 
-    train_generator = train_datagen.flow_from_directory(
-        train_data_dir,
-        target_size=(img_width, img_height),
-        batch_size=batch_size,
-        class_mode='categorical')
+train_generator = train_datagen.flow_from_directory(
+    train_data_dir,
+    target_size=(img_width, img_height),
+    batch_size=batch_size,
+    class_mode='categorical')
 
-    validation_generator = test_datagen.flow_from_directory(
-        validation_data_dir,
-        target_size=(img_width, img_height),
-        batch_size=batch_size,
-        class_mode='categorical')
+validation_generator = test_datagen.flow_from_directory(
+    validation_data_dir,
+    target_size=(img_width, img_height),
+    batch_size=batch_size,
+    class_mode='categorical')
 
-    model.fit_generator(
-        train_generator,
-        steps_per_epoch=nb_train_samples // batch_size,
-        epochs=epochs,
-        validation_data=validation_generator,
-        validation_steps=nb_validation_samples // batch_size)
+model.fit_generator(
+    train_generator,
+    steps_per_epoch=nb_train_samples // batch_size,
+    epochs=epochs,
+    validation_data=validation_generator,
+    validation_steps=nb_validation_samples // batch_size)
 
 
-train_model()
+# train_model()
 
 
 def predict_image(path):
