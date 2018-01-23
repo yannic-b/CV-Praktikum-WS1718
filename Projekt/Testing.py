@@ -31,16 +31,16 @@ FILTER = 64
 # dimensions of our images.
 img_width, img_height = 300, 180
 
-train_data_dir = 'data/train'
-validation_data_dir = 'data/validation'
+train_data_dir = 'dataO/train'
+validation_data_dir = 'dataO/validation'
 
 labels = sorted([dir for dir in os.listdir('data/train') if not dir.title().startswith('.')])
 # print labels
 
-nr_of_classes = len(os.listdir('data/train')) - 1
+nr_of_classes = len(os.listdir('dataO/train')) - 1
 # print nr_of_classes
-nb_train_samples = 32 * nr_of_classes
-nb_validation_samples = 18 * nr_of_classes
+nb_train_samples = 349  # 32 * nr_of_classes
+nb_validation_samples = 188  # 18 * nr_of_classes
 epochs = 128
 batch_size = 32
 
