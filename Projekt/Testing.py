@@ -112,19 +112,19 @@ validation_generator = test_datagen.flow_from_directory(
     batch_size=batch_size,
     class_mode='categorical')
 
-model.fit_generator(
-    train_generator,
-    steps_per_epoch=nb_train_samples // batch_size,
-    epochs=epochs,
-    validation_data=validation_generator,
-    validation_steps=nb_validation_samples // batch_size)
+# model.fit_generator(
+#     train_generator,
+#     steps_per_epoch=nb_train_samples // batch_size,
+#     epochs=epochs,
+#     validation_data=validation_generator,
+#     validation_steps=nb_validation_samples // batch_size)
 
 
 # train_model()
 
 
 def predict_image(path):
-    test_model = model  # load_model('testModel.h5')
+    test_model = load_model('testModel.h5')
     img = load_img(path, False, target_size=(img_width, img_height))
     print "\n\nTrying to predict following image (" + path + "): "
     # plt.imshow(img)
@@ -138,6 +138,7 @@ def predict_image(path):
     print prediction, '\n', classes, '\n', probs
 
 
+predict_image("beats.png")
 predict_image("germanyTest.png")
 predict_image("usaTest.png")
 predict_image("us-russia-flag.png")
