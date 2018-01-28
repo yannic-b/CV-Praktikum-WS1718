@@ -169,7 +169,7 @@ def conf_mat():
 
     labels = []
     for i in range(10):
-        labels += [1] * 50
+        labels += [i] * 50
     y_true = np.array(labels)
     y_pred = probabilities
 
