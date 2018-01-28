@@ -26,9 +26,9 @@ from keras import backend as K
 # matplotlib.use('Agg')
 
 # Hyper Parameters:
-LR = 0.01  # 0.00013
+LR = 0.001  # 0.00013
 MOMENTUM = 0.9
-DECAY = 1e-6
+DECAY = 1e-5
 KERNEL_SIZE = (4, 4)
 FILTER = 64
 img_width, img_height = 300, 180
