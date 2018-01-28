@@ -11,6 +11,7 @@ import os, errno
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import RMSprop, SGD
@@ -155,7 +156,31 @@ def augment_image(country, nr):
             break
 
 
-train_model(from_scratch=1, nr_convlayer=3)
+def conf_mat():
+    datagen = ImageDataGenerator(rescale=1. / 255)
+    generator = datagen.flow_from_directory(
+            'data/test',
+            target_size=(img_width, img_height),
+            batch_size=10,
+            class_mode=None,  # only data, no labels
+            shuffle=False)  # keep data in same order as labels
+
+    probabilities = model.predict_generator(generator, 500)
+
+    labels = []
+    for i in range(10):
+        labels += [1] * 50
+    y_true = np.array(labels)
+    y_pred = probabilities > 0.1
+
+    CM = confusion_matrix(y_true, y_pred)
+
+    print CM
+
+
+train_model(from_scratch=0, nr_convlayer=3)
+
+conf_mat()
 
 # predict()
 
