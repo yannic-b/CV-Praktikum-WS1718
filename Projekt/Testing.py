@@ -109,12 +109,14 @@ def train_model(from_scratch, nr_convlayer=1):
             batch_size=batch_size,
             class_mode='categorical')
 
-        model.fit_generator(
+        history = model.fit_generator(
             train_generator,
             steps_per_epoch=nb_train_samples // batch_size,
             epochs=epochs,
             validation_data=validation_generator,
             validation_steps=nb_validation_samples // batch_size)
+
+        plot_training(history)
     else:
         model = load_model('testModel.h5')
 
@@ -195,9 +197,21 @@ def calculate_metrics():
     print report
 
 
-train_model(from_scratch=1, nr_convlayer=3)
+def plot_training(fit):
+    print(fit.history.keys())
+    # summarize history for accuracy
+    plt.plot(fit.history['acc'])
+    plt.plot(fit.history['val_acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='lower right')
+    plt.savefig('training-history.png')
 
-calculate_metrics()
+
+train_model(from_scratch=0, nr_convlayer=3)
+
+# calculate_metrics()
 
 # predict()
 
