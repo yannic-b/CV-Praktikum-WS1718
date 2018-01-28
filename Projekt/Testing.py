@@ -7,12 +7,12 @@
 import os, errno
 
 # try:
+import matplotlib
+matplotlib.use('Agg')
 
 import numpy as np
 from scipy import misc
 from sklearn import metrics
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from keras.preprocessing.image import ImageDataGenerator
@@ -24,8 +24,6 @@ from keras.preprocessing.image import img_to_array, load_img
 from keras.models import load_model
 from keras.utils import plot_model
 from keras import backend as K
-
-
 
 
 img_dir = 'data/'
@@ -54,7 +52,7 @@ nr_of_classes = len(os.listdir(train_data_dir)) - 1
 # print nr_of_classes
 nb_train_samples = 349  # 32 * nr_of_classes
 nb_validation_samples = 188  # 18 * nr_of_classes
-epochs = 2
+epochs = 42
 batch_size = 16
 
 if K.image_data_format() == 'channels_first':
