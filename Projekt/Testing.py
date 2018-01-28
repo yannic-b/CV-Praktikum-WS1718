@@ -173,6 +173,9 @@ def conf_mat():
     y_true = np.array(labels)
     y_pred = probabilities
 
+    print y_true
+    print y_pred
+
     CM = confusion_matrix(y_true, y_pred)
 
     print CM
