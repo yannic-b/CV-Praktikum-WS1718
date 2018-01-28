@@ -171,7 +171,7 @@ def conf_mat():
     for i in range(10):
         labels += [1] * 50
     y_true = np.array(labels)
-    y_pred = probabilities > 0.1
+    y_pred = probabilities
 
     CM = confusion_matrix(y_true, y_pred)
 
