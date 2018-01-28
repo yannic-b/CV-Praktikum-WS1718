@@ -12,6 +12,7 @@ import numpy as np
 from scipy import misc
 from sklearn import metrics
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from keras.preprocessing.image import ImageDataGenerator
@@ -25,7 +26,7 @@ from keras.utils import plot_model
 from keras import backend as K
 
 
-# matplotlib.use('Agg')
+
 
 img_dir = 'data/'
 
@@ -53,7 +54,7 @@ nr_of_classes = len(os.listdir(train_data_dir)) - 1
 # print nr_of_classes
 nb_train_samples = 349  # 32 * nr_of_classes
 nb_validation_samples = 188  # 18 * nr_of_classes
-epochs = 42
+epochs = 2
 batch_size = 16
 
 if K.image_data_format() == 'channels_first':
@@ -211,7 +212,7 @@ def plot_training(fit):
 
 train_model(from_scratch=1, nr_convlayer=3)
 
-calculate_metrics()
+# calculate_metrics()
 
 # predict()
 
