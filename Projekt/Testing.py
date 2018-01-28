@@ -11,7 +11,7 @@ import os, errno
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
+from sklearn import metrics
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import RMSprop, SGD
@@ -173,13 +173,17 @@ def conf_mat():
     y_true = np.array(y_labels)
     y_pred = np.argmax(probabilities, axis=1)
 
-    print y_true
-    print y_pred
+    # print y_true
+    # print y_pred
 
     print labels
-    cm = confusion_matrix(y_true, y_pred)  # , labels=labels)
+    cm = metrics.confusion_matrix(y_true, y_pred)  # , labels=labels)
+    accuracy = metrics.accuracy_score(y_true, y_pred)
+    precision = metrics.precision_score(y_true, y_pred)
 
-    print cm
+    print cm, accuracy, precision
+
+
 
 
 train_model(from_scratch=0, nr_convlayer=3)
