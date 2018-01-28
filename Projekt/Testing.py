@@ -165,7 +165,7 @@ def conf_mat():
             class_mode=None,  # only data, no labels
             shuffle=False)  # keep data in same order as labels
 
-    probabilities = model.predict_generator(generator, 500)
+    probabilities = model.predict_generator(generator, 50)
 
     labels = []
     for i in range(10):
