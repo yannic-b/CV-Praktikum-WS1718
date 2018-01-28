@@ -36,8 +36,8 @@ img_width, img_height = 300, 180
 RMSPROP = RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY)
 SGD_OPT = SGD(lr=LR, momentum=MOMENTUM, decay=DECAY, nesterov=True)
 
-train_data_dir = 'data/train'
-validation_data_dir = 'data/validation'
+train_data_dir = 'dataO/train'
+validation_data_dir = 'dataO/validation'
 
 labels = sorted([drtr for drtr in os.listdir(train_data_dir) if not drtr.title().startswith('.')])
 # print labels
@@ -76,7 +76,7 @@ def train_model(from_scratch, nr_convlayer=1):
         # model.add(Activation('sigmoid'))
         model.add(Activation('softmax'))
         model.compile(loss='categorical_crossentropy',
-                      optimizer="adam",
+                      optimizer=RMSPROP,
                       metrics=['categorical_accuracy'])  # ['accuracy'])
 
         # this is the augmentation configuration we will use for training
@@ -156,7 +156,7 @@ def augment_image(country, nr):
             break
 
 
-def conf_mat():
+def calculate_metrics():
     datagen = ImageDataGenerator(rescale=1. / 255)
     generator = datagen.flow_from_directory(
             'data/test',
@@ -179,16 +179,18 @@ def conf_mat():
     print labels
     cm = metrics.confusion_matrix(y_true, y_pred)  # , labels=labels)
     accuracy = metrics.accuracy_score(y_true, y_pred)
-    precision = metrics.precision_score(y_true, y_pred)
+    precision = metrics.precision_score(y_true, y_pred, average='weighted')
+    report = metrics.classification_report(y_true, y_pred, list(range(10)), target_names=labels)
 
-    print cm, accuracy, precision
+    print cm
+    print "\nAccuracy:", accuracy, "| Precision:", precision
+    print "\nReport:\n"
+    print report
 
 
+train_model(from_scratch=1, nr_convlayer=3)
 
-
-train_model(from_scratch=0, nr_convlayer=3)
-
-conf_mat()
+calculate_metrics()
 
 # predict()
 
