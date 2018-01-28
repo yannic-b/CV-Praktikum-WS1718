@@ -27,7 +27,7 @@ from keras import backend as K
 
 # matplotlib.use('Agg')
 
-img_dir = 'dataO/'
+img_dir = 'data/'
 
 # Hyper Parameters:
 LR = 0.001  # 0.00013
