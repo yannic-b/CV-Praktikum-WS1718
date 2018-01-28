@@ -167,18 +167,18 @@ def conf_mat():
 
     probabilities = model.predict_generator(generator, 50)
 
-    labels = []
+    y_labels = []
     for i in range(10):
-        labels += [i] * 50
-    y_true = np.array(labels)
+        y_labels += [i] * 50
+    y_true = np.array(y_labels)
     y_pred = np.argmax(probabilities, axis=1)
 
     print y_true
     print y_pred
 
-    CM = confusion_matrix(y_true, y_pred)
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
 
-    print CM
+    print cm
 
 
 train_model(from_scratch=0, nr_convlayer=3)
