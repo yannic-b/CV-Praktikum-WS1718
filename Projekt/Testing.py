@@ -209,9 +209,9 @@ def plot_training(fit):
     plt.savefig('training-history.png')
 
 
-train_model(from_scratch=0, nr_convlayer=3)
+train_model(from_scratch=1, nr_convlayer=3)
 
-# calculate_metrics()
+calculate_metrics()
 
 # predict()
 
