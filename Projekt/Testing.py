@@ -176,6 +176,7 @@ def conf_mat():
     print y_true
     print y_pred
 
+    print labels
     cm = confusion_matrix(y_true, y_pred, labels=labels)
 
     print cm
