@@ -75,7 +75,7 @@ def train_model(from_scratch, nr_convlayer=1):
         # model.add(Activation('sigmoid'))
         model.add(Activation('softmax'))
         model.compile(loss='categorical_crossentropy',
-                      optimizer=RMSPROP,
+                      optimizer="adam",
                       metrics=['categorical_accuracy'])  # ['accuracy'])
 
         # this is the augmentation configuration we will use for training
