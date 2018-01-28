@@ -200,8 +200,8 @@ def calculate_metrics():
 def plot_training(fit):
     print(fit.history.keys())
     # summarize history for accuracy
-    plt.plot(fit.history['acc'])
-    plt.plot(fit.history['val_acc'])
+    plt.plot(fit.history['categorical_accuracy'])
+    plt.plot(fit.history['val_categorical_accuracy'])
     plt.title('model accuracy')
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
