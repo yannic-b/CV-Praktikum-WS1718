@@ -26,12 +26,14 @@ from keras import backend as K
 # matplotlib.use('Agg')
 
 # Hyper Parameters:
-LR = 0.001  # 0.00013
-DECAY = 0.0001
+LR = 0.01  # 0.00013
+MOMENTUM = 0.9
+DECAY = 1e-6
 KERNEL_SIZE = (4, 4)
 FILTER = 64
-# dimensions of our images.
 img_width, img_height = 300, 180
+RMSPROP = RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY)
+SGD_OPT = SGD(lr=LR, momentum=MOMENTUM, decay=DECAY, nesterov=True)
 
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
@@ -55,25 +57,16 @@ else:
 model = None
 
 
-def train_model(from_scratch):
+def train_model(from_scratch, nr_convlayer=1):
     global model
     if from_scratch:
         model = Sequential()
-        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+
+        for _ in range(nr_convlayer + 1):
+            model.add(Conv2D(FILTER, KERNEL_SIZE, input_shape=input_shape))
+            model.add(Activation('relu'))
+            model.add(MaxPooling2D(pool_size=(2, 2)))
+
         model.add(Flatten())
         model.add(Dense(64))
         model.add(Activation('relu'))
@@ -82,8 +75,9 @@ def train_model(from_scratch):
         # model.add(Activation('sigmoid'))
         model.add(Activation('softmax'))
         model.compile(loss='categorical_crossentropy',
-                      optimizer=RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY),
+                      optimizer=SGD_OPT,
                       metrics=['categorical_accuracy'])  # ['accuracy'])
+
         # this is the augmentation configuration we will use for training
         train_datagen = ImageDataGenerator(
             rotation_range=45,
@@ -91,19 +85,22 @@ def train_model(from_scratch):
             shear_range=0.17,
             zoom_range=0.17,
             horizontal_flip=True)
+
         # this is the augmentation configuration we will use for testing:
-        # only rescaling
-        test_datagen = ImageDataGenerator(rescale=1. / 255)
+        test_datagen = ImageDataGenerator(rescale=1. / 255)  # only rescaling
+
         train_generator = train_datagen.flow_from_directory(
             train_data_dir,
             target_size=(img_width, img_height),
             batch_size=batch_size,
             class_mode='categorical')
+
         validation_generator = test_datagen.flow_from_directory(
             validation_data_dir,
             target_size=(img_width, img_height),
             batch_size=batch_size,
             class_mode='categorical')
+
         model.fit_generator(
             train_generator,
             steps_per_epoch=nb_train_samples // batch_size,
@@ -139,10 +136,10 @@ def augment_image(country, nr):
     datagen = ImageDataGenerator(
         rescale=1. / 255,
         rotation_range=25,
-        # width_shift_range=0.2,
-        # height_shift_range=0.2,
-        shear_range=0.07,
-        zoom_range=0.07,
+        width_shift_range=0.07,
+        height_shift_range=0.07,
+        shear_range=0.13,
+        zoom_range=0.13,
         horizontal_flip=True,
         fill_mode='nearest',
         cval=128)
@@ -154,11 +151,11 @@ def augment_image(country, nr):
     i = 0
     for batch in datagen.flow(x, batch_size=1, save_to_dir='augmented-images', save_prefix=country, save_format='png'):
         i += 1
-        if i > 20:
+        if i > 9:
             break
 
 
-train_model(from_scratch=0)
+train_model(from_scratch=1, nr_convlayer=3)
 
 # predict()
 
