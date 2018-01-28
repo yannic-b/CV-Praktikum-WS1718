@@ -171,7 +171,7 @@ def conf_mat():
     for i in range(10):
         labels += [i] * 50
     y_true = np.array(labels)
-    y_pred = np.argmax(probabilities)
+    y_pred = np.argmax(probabilities, axis=1)
 
     print y_true
     print y_pred
