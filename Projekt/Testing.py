@@ -9,9 +9,10 @@ import os, errno
 # try:
 
 import numpy as np
+from scipy import misc
+from sklearn import metrics
 import matplotlib
 import matplotlib.pyplot as plt
-from sklearn import metrics
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import RMSprop, SGD
@@ -26,18 +27,24 @@ from keras import backend as K
 
 # matplotlib.use('Agg')
 
+img_dir = 'dataO/'
+
 # Hyper Parameters:
 LR = 0.001  # 0.00013
 MOMENTUM = 0.9
 DECAY = 1e-5
 KERNEL_SIZE = (4, 4)
 FILTER = 64
-img_width, img_height = 300, 180
 RMSPROP = RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY)
 SGD_OPT = SGD(lr=LR, momentum=MOMENTUM, decay=DECAY, nesterov=True)
 
-train_data_dir = 'dataO/train'
-validation_data_dir = 'dataO/validation'
+temp_dir = img_dir + 'train/canada/'
+img = misc.imread(temp_dir + os.listdir(temp_dir)[1])
+img_shape = img.shape
+img_width, img_height = img_shape[1], img_shape[0]
+
+train_data_dir = img_dir+'train'
+validation_data_dir = img_dir+'validation'
 
 labels = sorted([drtr for drtr in os.listdir(train_data_dir) if not drtr.title().startswith('.')])
 # print labels
