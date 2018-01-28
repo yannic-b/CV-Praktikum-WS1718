@@ -32,7 +32,7 @@ img_dir = 'data/'
 # Hyper Parameters:
 LR = 0.001  # 0.00013
 MOMENTUM = 0.9
-DECAY = 1e-5
+DECAY = 1e-4
 KERNEL_SIZE = (4, 4)
 FILTER = 64
 RMSPROP = RMSprop(lr=LR, rho=0.9, epsilon=K.epsilon(), decay=DECAY)
