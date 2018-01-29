@@ -7,8 +7,8 @@
 import os  # , errno
 
 # try:
-# import matplotlib
-# matplotlib.use('Agg')
+import matplotlib
+matplotlib.use('Agg')
 
 import numpy as np
 from scipy import misc
