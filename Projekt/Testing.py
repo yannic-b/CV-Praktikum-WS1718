@@ -4,11 +4,11 @@
 @author: Yannic
 """
 
-import os, errno
+import os  # , errno
 
 # try:
-import matplotlib
-matplotlib.use('Agg')
+# import matplotlib
+# matplotlib.use('Agg')
 
 import numpy as np
 from scipy import misc
@@ -22,7 +22,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 from keras.preprocessing.image import img_to_array, load_img
 from keras.models import load_model
-from keras.utils import plot_model
+# from keras.utils import plot_model
 from keras import backend as K
 
 
@@ -121,10 +121,10 @@ def train_model(from_scratch, nr_convlayer=1):
 
 
 def predict_image(path):
-    img = load_img('predict/'+path, False, target_size=(img_width, img_height))
+    image = load_img('predict/'+path, False, target_size=(img_width, img_height))
     print "\n\nTrying to predict following image (" + path + "): "
-    # plt.imshow(img)
-    x = img_to_array(img)
+    # plt.imshow(image)
+    x = img_to_array(image)
     x /= 255
     x = np.expand_dims(x, axis=0)
     print "The image probably shows the flag of " + labels[model.predict_classes(x, verbose=0)[0]] + "."
@@ -137,8 +137,8 @@ def predict_image(path):
 
 
 def predict():
-    for img in os.listdir('predict'):
-        predict_image(img)
+    for image in os.listdir('predict'):
+        predict_image(image)
 
 
 def augment_image(country, nr):
@@ -152,13 +152,13 @@ def augment_image(country, nr):
         horizontal_flip=True,
         fill_mode='nearest',
         cval=128)
-    img = load_img('data/train/'+country+'/'+country+nr+'.png')  # this is a PIL image
-    x = img_to_array(img)  # this is a Numpy array with shape (3, 150, 150)
+    image = load_img('data/train/'+country+'/'+country+nr+'.png')  # this is a PIL image
+    x = img_to_array(image)  # this is a Numpy array with shape (3, 150, 150)
     x = x.reshape((1,) + x.shape)  # this is a Numpy array with shape (1, 3, 150, 150)
     # the .flow() command below generates batches of randomly transformed images
     # and saves the results to the `preview/` directory
     i = 0
-    for batch in datagen.flow(x, batch_size=1, save_to_dir='augmented-images', save_prefix=country, save_format='png'):
+    for _ in datagen.flow(x, batch_size=1, save_to_dir='augmented-images', save_prefix=country, save_format='png'):
         i += 1
         if i > 9:
             break
@@ -182,7 +182,7 @@ def calculate_metrics():
     y_pred = np.argmax(probabilities, axis=1)
 
     # print y_true
-    # print y_pred
+    print y_pred
 
     print labels
     cm = metrics.confusion_matrix(y_true, y_pred)  # , labels=labels)
@@ -208,9 +208,9 @@ def plot_training(fit):
     plt.savefig('training-history.png')
 
 
-train_model(from_scratch=1, nr_convlayer=3)
+train_model(from_scratch=0, nr_convlayer=3)
 
-# calculate_metrics()
+calculate_metrics()
 
 # predict()
 
